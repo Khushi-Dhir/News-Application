@@ -1,16 +1,10 @@
 const mongoose = require('mongoose');
 const newsSchema = mongoose.Schema({
-    title: String,
-    description: {
-        type: String,
-        required: [true,'Please add a title']
-    },
-    category: String,
-    source: String,
-    
-  },{
-    timestamps: true
-  }
-);
+  title: String,
+  content: String,
+  link: { type: String, unique: true },
+  pubDate: Date
+});
 
-module.exports = mongoose.model('news', newsSchema);
+const News = mongoose.model('news', newsSchema);
+module.exports = News;
