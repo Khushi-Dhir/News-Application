@@ -1,0 +1,55 @@
+
+body {
+  font-family: "Georgia", serif;
+  background-color: var(--flax); /* Light beige for a newspaper feel */
+  color: var(--smoky-black); /* Dark text for readability */
+}
+
+.newspaper-title {
+  font-family: "Times New Roman", serif;
+  font-size: 3rem;
+  color: var(--icterine);
+  letter-spacing: 2px;
+  text-shadow: 1px 1px var(--smoky-black);
+}
+
+.newspaper-bg {
+  background-color: var(--celadon);
+}
+
+.category-btn {
+  background-color: var(--reseda-green);
+  color: var(--flax);
+  border: none;
+  font-weight: bold;
+}
+
+.category-btn:hover {
+  background-color: var(--icterine);
+  color: var(--smoky-black);
+}
+
+.featured-story img {
+  border: 3px solid var(--reseda-green);
+  border-radius: 10px;
+}
+
+footer {
+  background-color: var(--smoky-black);
+  color: var(--flax);
+  padding: 20px 0;
+}
+
+footer p {
+  margin: 0;
+}
+
+.btn-primary {
+  background-color: var(--reseda-green);
+  border-color: var(--reseda-green);
+}
+
+.btn-primary:hover {
+  background-color: var(--icterine);
+  border-color: var(--icterine);
+}
