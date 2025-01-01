@@ -19,12 +19,7 @@ function Main() {
 
   return (
     <div className="container-fluid newspaper-background">
-      <header className="bg-light text-dark py-4 border-bottom">
-        <div className="container text-center">
-          <h1 className="display-4 classic-title">The Daily Chronicle</h1>
-          <p className="lead">Your trusted source for daily news</p>
-        </div>
-      </header>
+      
 
       <section className="py-3 category-section">
         <div className="container text-center ">

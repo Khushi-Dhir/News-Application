@@ -26,8 +26,8 @@ const getNews =asyncHandler( async ( req,res ) => {
     //     );
     //   }
   
-    const newsArticles = await News.find(); // Fetch all news articles from MongoDB
-    res.status(200).json({ newsData: newsArticles }); // Return the articles in the response
+    const newsArticles = await News.find(); 
+    res.status(200).json({ newsData: newsArticles });
   } catch (error) {
     console.error('Error fetching news data from database:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -37,19 +37,16 @@ const setNews = asyncHandler(async (req, res) => {
   try {
     const { title, content, link, category, url } = req.body;
 
-    // Ensure required fields are present
     if (!title || !content || !link) {
       return res.status(400).json({ message: 'Title, content, and link are required.' });
     }
 
     const pubDate = new Date();
 
-    // Construct the news article object conditionally
     const newsArticleData = url
       ? { title, content, link, pubDate, category, url }
       : { title, content, link, pubDate, category };
 
-    // Save the new news article to MongoDB
     const newsArticle = new News(newsArticleData);
     await newsArticle.save();
 
@@ -62,17 +59,15 @@ const setNews = asyncHandler(async (req, res) => {
 
 const putNews = asyncHandler(async (req, res) => {
   try {
-    // Ensure the ID is valid and news article exists
     const newsArticle = await News.findById(req.params.id);
     if (!newsArticle) {
       return res.status(404).json({ message: 'News Not Found' });
     }
 
-    // Update the news article with the provided fields
     const updatedNews = await News.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true, runValidators: true } // `runValidators` ensures validation rules are applied
+      { new: true, runValidators: true } 
     );
 
     res.status(200).json(updatedNews);
@@ -85,15 +80,12 @@ const putNews = asyncHandler(async (req, res) => {
 
 const deleteNews = asyncHandler(async (req, res) => {
   try {
-    // Find the news article by ID
     const newsArticle = await News.findById(req.params.id);
 
-    // Check if the news article exists
     if (!newsArticle) {
       return res.status(404).json({ message: 'News Not Found' });
     }
 
-    // Delete the news article
     await newsArticle.deleteOne();
 
     res.status(200).json({ message: 'Deleted successfully' });
