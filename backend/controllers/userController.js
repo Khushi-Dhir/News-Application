@@ -11,7 +11,9 @@ const getUserData = asyncHandler(async (req,res) =>{
         if(!user){
             return res.status(404).json({ success: false,message: 'User not found'})
         }
-        res.status(200).json({ success: true,userData: {
+        res.status(200).json({ 
+            success: true,
+            userData: {
             id: user._id,
             name: user.name,
             email: user.email,

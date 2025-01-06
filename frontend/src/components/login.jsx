@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AppContent } from '../context/appContext';
 import axios from 'axios';
@@ -17,14 +17,15 @@ const Login = () => {
   const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {
-    e.preventDefault();
     try {
+      e.preventDefault();
       axios.defaults.withCredentials = true;
 
       if (state === 'Sign Up') {
-        const { data } = await axios.post(backendUrl + 'api/user/signin', { name, email, password });
-        if (data.success) { 
-          
+        const { data } = await axios.post(backendUrl + '/api/user/signin', { name, email, password });
+        if (data.success) {
+          // Store token if provided in response
+          localStorage.setItem("auth_token", data.token);
           setIsLoggedIn(true);
           getUserData();
           navigate('/');
@@ -32,28 +33,34 @@ const Login = () => {
           toast.error(data.message);
         }
       } else if (state === 'Login') {
-        const { data } = await axios.post(backendUrl + 'api/user/login', { email, password });
+        const { data } = await axios.post(backendUrl + '/api/user/login', { email, password });
         if (data.success) {
+          // Store token if provided in response
+          localStorage.setItem("auth_token", data.token);
           setIsLoggedIn(true);
           getUserData();
           navigate('/');
         } else {
           toast.error(data.message);
         }
-      } else if (resetPassword) {
-        // Add your reset password logic here
-        toast.success('Password reset link has been sent to your email');
-        setResetPassword(false);
-        setState('Login');
       }
     } catch (error) {
       toast.error(error.message);
     }
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem("auth_token");
+    if (token) {
+      setIsLoggedIn(true);
+      getUserData();
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [setIsLoggedIn]);
+
   const handleResetPassword = () => {
-    setState('Reset Password');
-    setResetPassword(true);
+    navigate('/reset-password');
   };
 
   // Animations using GSAP
@@ -75,8 +82,8 @@ const Login = () => {
                   className="form-control"
                   id="floatingName"
                   placeholder="Your Name"
-                  value={name}
                   onChange={(e) => setName(e.target.value)}
+                  value={name}
                   required
                 />
                 <label htmlFor="floatingName">Your Name</label>
@@ -88,8 +95,8 @@ const Login = () => {
                 className="form-control"
                 id="floatingEmail"
                 placeholder="Your Email"
-                value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 required
               />
               <label htmlFor="floatingEmail">Your Email</label>
@@ -101,8 +108,8 @@ const Login = () => {
                   className="form-control"
                   id="floatingPassword"
                   placeholder="Your Password"
-                  value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                   required
                 />
                 <label htmlFor="floatingPassword">Your Password</label>
@@ -123,8 +130,8 @@ const Login = () => {
               padding: '10px',
               borderRadius: '10px',
               fontSize: '1rem',
-              backgroundColor: '#007bff', // Change background color
-              borderColor: '#007bff', // Border color to match
+              backgroundColor: '#007bff',
+              borderColor: '#007bff',
             }}
           >
             {state === 'Sign Up' ? 'Sign Up' : state === 'Login' ? 'Login' : 'Reset Password'}
@@ -137,7 +144,7 @@ const Login = () => {
                   onClick={handleResetPassword}
                   style={{ color: '#007bff', cursor: 'pointer', textDecoration: 'underline' }}
                 >
-                  Reset here
+                  Reset Password
                 </span>
               </p>
               <p className="text-muted">

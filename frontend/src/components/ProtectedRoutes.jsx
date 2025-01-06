@@ -3,15 +3,19 @@ import { Navigate } from "react-router-dom";
 import { AppContent } from "../context/appContext";
 
 const ProtectedRoute = ({ children }) => {
-  const { isLoggedin, setIsLoggedIn } = useContext(AppContent);
+  const { isLoggedIn, setIsLoggedIn } = useContext(AppContent);
 
   useEffect(() => {
-    const loggedInState = JSON.parse(localStorage.getItem("isLoggedin"));
-    if (loggedInState) setIsLoggedIn(true);
+    // Check if user is logged in on page load
+    const token = localStorage.getItem("auth_token");
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
   }, [setIsLoggedIn]);
 
-  return isLoggedin ? children : <Navigate to="/login" />;
+  return isLoggedIn ? children : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;
-
