@@ -5,8 +5,8 @@ import Navbar from './navbar';
 import { gsap } from 'gsap';
 
 const Main = () => {
-  const [allNews, setAllNews] = useState([]); // All news data
-  const [filteredNews, setFilteredNews] = useState([]); // Filtered news data
+  const [allNews, setAllNews] = useState([]); 
+  const [filteredNews, setFilteredNews] = useState([]); 
 
   const fetchNews = async () => {
     try {
@@ -20,7 +20,7 @@ const Main = () => {
         const newsData = response.data.newsData || [];
         setAllNews(newsData);
         setFilteredNews(newsData);
-        localStorage.setItem('newsData', JSON.stringify(newsData)); // Cache news data
+        localStorage.setItem('newsData', JSON.stringify(newsData)); 
       }
     } catch (error) {
       console.error('Error fetching news:', error);
@@ -39,7 +39,7 @@ const Main = () => {
 
   const handleSearch = (query) => {
     if (query.trim() === '') {
-      setFilteredNews(allNews); // Reset to all news if search query is empty
+      setFilteredNews(allNews); 
     } else {
       const lowercasedQuery = query.toLowerCase();
       const filtered = allNews.filter(
@@ -56,7 +56,6 @@ const Main = () => {
     setFilteredNews(filtered);
   };
 
-  // Separate news items with and without `url`
   const newsWithUrl = filteredNews.filter((item) => item.url);
   const newsWithoutUrl = filteredNews.filter((item) => !item.url);
 

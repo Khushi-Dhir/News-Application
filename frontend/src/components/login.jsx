@@ -12,7 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [resetPassword, setResetPassword] = useState(false); // Reset Password State
+  const [resetPassword, setResetPassword] = useState(false); 
   const { backendUrl, setIsLoggedIn, getUserData } = useContext(AppContent);
   const navigate = useNavigate();
 
@@ -24,7 +24,6 @@ const Login = () => {
       if (state === 'Sign Up') {
         const { data } = await axios.post(backendUrl + '/api/user/signin', { name, email, password });
         if (data.success) {
-          // Store token if provided in response
           localStorage.setItem("auth_token", data.token);
           setIsLoggedIn(true);
           getUserData();
@@ -35,7 +34,6 @@ const Login = () => {
       } else if (state === 'Login') {
         const { data } = await axios.post(backendUrl + '/api/user/login', { email, password });
         if (data.success) {
-          // Store token if provided in response
           localStorage.setItem("auth_token", data.token);
           setIsLoggedIn(true);
           getUserData();
@@ -63,7 +61,6 @@ const Login = () => {
     navigate('/reset-password');
   };
 
-  // Animations using GSAP
   React.useEffect(() => {
     gsap.fromTo('.login-form', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 1 });
     gsap.fromTo('.login-header', { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.2 });

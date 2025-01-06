@@ -48,7 +48,6 @@ const Navbar = ({ onSearch, onCategorySelect }) => {
     }
   };
 
-  // GSAP dropdown animation
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
     const dropdown = document.getElementById('userDropdownMenu');

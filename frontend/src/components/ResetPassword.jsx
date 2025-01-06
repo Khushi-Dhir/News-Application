@@ -6,17 +6,16 @@ import axios from 'axios';
 import { gsap } from 'gsap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 const ResetPassword = () => {
   const navigate = useNavigate();
   const { isLoggedIn, userData, setIsLoggedIn, backendUrl, getUserData } = useContext(AppContent);
   const inputRefs = useRef([]);
   const [email, setEmail] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');  
   const [isEmailSent, setIsEmailSent] = useState('');
   const [otp, setOtp] = useState(0);
   const [isOtpSubmitted, setIsOtpSubmitted] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     gsap.fromTo('.reset-form', { opacity: 0, y: -50 }, { opacity: 1, y: 0, duration: 1 });
@@ -58,21 +57,62 @@ const ResetPassword = () => {
 
   const onSubmitOtp = async (e) => {
     e.preventDefault();
-    const otpArray = inputRefs.current.map(e => e.value);
+    let otpArray = inputRefs.current.map(e => e.value);
     setOtp(otpArray.join(''));
     setIsOtpSubmitted(true);
   };
 
   const onSubmitNewPassword = async (e) => {
     e.preventDefault();
+
+    console.log('Sending request with data:', { email, otp, newPassword });  // Corrected variable name
+
     try {
-      const { data } = await axios.post(`${backendUrl}/api/user/reset-pass-otp`, { email, otp, newPassword }, { withCredentials: true });
-      data.success? toast.success(data.message) : toast.error(data.message);
-      data.success && navigate('/login')
+      if (!email || !otp || !newPassword) {
+        toast.error("Please fill all the fields correctly.");
+        return;
+      }
+
+      if (newPassword.length < 6) { 
+        toast.error("Password must be at least 6 characters.");
+        return;
+      }
+
+      const resetData = {
+        email,
+        otp, 
+        password: newPassword, 
+      };
+
+      const { data } = await axios.post(
+        `${backendUrl}/api/user/reset-pass-otp`,
+        resetData,
+        {
+          headers: {
+            'Content-Type': 'application/json', 
+          },
+          withCredentials: true,
+        }
+      );
+
+      console.log('Response data:', data);
+
+      if (data.success) {
+        toast.success(data.message);
+        navigate('/login');
+      } else {
+        toast.error(data.message);
+      }
     } catch (e) {
-      toast.error(e.message);
+      if (e.response) {
+        console.error('Backend error:', e.response.data);
+        toast.error(e.response.data.message || 'An error occurred');
+      } else {
+        console.error('Error:', e.message);
+        toast.error(e.message);
+      }
     }
-  }
+  };
 
   return (
     <div className="reset-form" style={styles.container}>
@@ -118,7 +158,7 @@ const ResetPassword = () => {
         </form>
       }
 
-      {!isEmailSent && isOtpSubmitted &&
+      {isEmailSent && isOtpSubmitted &&
         <form onSubmit={onSubmitNewPassword}  style={styles.form}>
           <h1 style={styles.heading}>New Password</h1>
           <p style={styles.subHeading}>Enter Your New Password Below</p>

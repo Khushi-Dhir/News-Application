@@ -5,7 +5,7 @@ import axios from 'axios';
 import { AppContent } from '../context/appContext';
 import { useNavigate } from 'react-router-dom';
 
-// Lazy load the EmailVerify component
+
 const EmailVerifyLazy = React.lazy(() => import('./EmailVerify'));
 
 const EmailVerify = () => {
@@ -62,13 +62,13 @@ const EmailVerify = () => {
     gsap.from('.email-verify-container', {
       opacity: 0,
       y: -50,
-      duration: 0.6, // Reduced duration for faster animation
+      duration: 0.6, 
       ease: 'power2.out',
     });
     gsap.from('.email-verify-form', {
       opacity: 0,
       y: 50,
-      duration: 0.8, // Reduced duration for faster animation
+      duration: 0.8, 
       delay: 0.3,
       ease: 'power2.out',
     });

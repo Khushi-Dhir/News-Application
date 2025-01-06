@@ -6,7 +6,6 @@ const ProtectedRoute = ({ children }) => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AppContent);
 
   useEffect(() => {
-    // Check if user is logged in on page load
     const token = localStorage.getItem("auth_token");
     if (token) {
       setIsLoggedIn(true);
