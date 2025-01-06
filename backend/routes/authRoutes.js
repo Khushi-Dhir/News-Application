@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { signIn,sendverifyOtp,ResetPassword,sendResetOtp,login,verifyEmail,isAuthenticated } = require('../controllers/authController')
+const { signIn,sendverifyOtp,logout,ResetPassword,sendResetOtp,login,verifyEmail,isAuthenticated } = require('../controllers/authController')
 const {userAuth} = require('../middleware/authMiddleware') 
 
   //signin 
@@ -9,10 +9,11 @@ const {userAuth} = require('../middleware/authMiddleware')
   // Verify Authentication
   router.post('/send-verify-otp',userAuth, sendverifyOtp);
   router.post('/verify-email',userAuth, verifyEmail);
-  router.post('/isauthenticated',userAuth, isAuthenticated);
+  router.get('/isauthenticated',userAuth, isAuthenticated);
   
-  // Login User
+  // Login-Logout User
   router.post('/login',login);
+  router.post('/logout',logout);
 
   //reset
   router.post('/send-reset-pass-otp',sendResetOtp);

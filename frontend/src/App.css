@@ -50,6 +50,26 @@ footer p {
 }
 
 .btn-primary:hover {
-  background-color: var(--icterine);
-  border-color: var(--icterine);
+  background-color: #0056b3; /* Darker blue */
+  border-color: #0056b3;
 }
+
+/* Animation for the cards */
+.news-card {
+  /* opacity: 0; */
+  transform: translateY(30px);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+}
+
+.news-card:hover {
+  transform: scale(1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.news-card img {
+  transition: transform 0.3s ease;
+}
+
+
+
+
