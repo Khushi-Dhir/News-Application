@@ -40,8 +40,16 @@ const EmailVerify = () => {
       e.preventDefault();
       const otpArray = inputRefs.current.map(e => e.value);
       const otp = otpArray.join('');
-
-      const { data } = await axios.post(`${backendUrl}/api/user/verify-email`, { otp }, { withCredentials: true });
+      console.log('Submitting OTP:', otp);
+  
+      const { data } = await axios.post(
+        `${backendUrl}/api/user/verify-email`, 
+        { otp }, 
+        { withCredentials: true }
+      );
+  
+      console.log('API Response:', data);
+  
       if (data.success) {
         toast.success(data.message);
         setIsLoggedIn(true);
@@ -51,28 +59,38 @@ const EmailVerify = () => {
         toast.error(data.message);
       }
     } catch (e) {
-      toast.error('Error occurred');
+      if (e.response) {
+        console.error('Response Error:', e.response.data);
+        console.error('Status Code:', e.response.status);
+        toast.error(e.response.data.message || 'Error occurred');
+      } else if (e.request) {
+        console.error('Request Error:', e.request);
+        toast.error('No response from the server');
+      } else {
+        console.error('Axios Error:', e.message);
+        toast.error(e.message);
+      }
     }
   };
+
+  
   useEffect(() => {
     isLoggedIn && userData && userData.isVerified && navigate('/')
   },[isLoggedIn,userData])
 
   useEffect(() => {
-    gsap.from('.email-verify-container', {
-      opacity: 0,
-      y: -50,
-      duration: 0.6, 
-      ease: 'power2.out',
-    });
-    gsap.from('.email-verify-form', {
-      opacity: 0,
-      y: 50,
-      duration: 0.8, 
-      delay: 0.3,
-      ease: 'power2.out',
-    });
+    gsap.fromTo(
+      '.email-verify-container',
+      { opacity: 0, y: -30 }, // Starting state
+      { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' } // Ending state
+    );
+    gsap.fromTo(
+      '.email-verify-form',
+      { opacity: 0, y: 30 }, // Starting state
+      { opacity: 1, y: 0, duration: 0.5, delay: 0.2, ease: 'power2.out' } // Ending state
+    );
   }, []);
+  
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

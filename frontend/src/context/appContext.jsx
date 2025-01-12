@@ -21,7 +21,7 @@ export const AppContextProvider = (props) => {
         toast.error("You are not logged in");
       }
     } catch (err) {
-      toast.error(err.message);
+      console.error(err.message);
     }
   };
 
@@ -34,7 +34,7 @@ export const AppContextProvider = (props) => {
         toast.error(data.message);
       }
     } catch (err) {
-      toast.error(err.message);
+      console.error(err.message);
     }
   };
 

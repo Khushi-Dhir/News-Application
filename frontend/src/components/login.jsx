@@ -43,7 +43,7 @@ const Login = () => {
         }
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message+"1kd");
     }
   };
 
@@ -55,7 +55,7 @@ const Login = () => {
     } else {
       setIsLoggedIn(false);
     }
-  }, [setIsLoggedIn]);
+  }, [setIsLoggedIn,getUserData]);
 
   const handleResetPassword = () => {
     navigate('/reset-password');

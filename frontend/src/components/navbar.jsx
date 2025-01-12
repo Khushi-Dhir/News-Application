@@ -1,9 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { AppContent } from '../context/appContext';
-import { useNavigate } from 'react-router-dom';
-import gsap from 'gsap';
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import gsap from 'gsap';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Navbar = ({ onSearch, onCategorySelect }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -12,15 +13,17 @@ const Navbar = ({ onSearch, onCategorySelect }) => {
   const navigate = useNavigate();
 
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    onSearch(searchQuery.trim());
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    onSearch(query); 
   };
 
   const handleCategoryClick = (category) => {
-    onCategorySelect (category);
+    onCategorySelect(category);
   };
 
+  
   const handleLogout = async () => {
     try {
       const {data} = await axios.post(`${backendUrl}/api/user/logout`, { withCredentials: true });
@@ -61,6 +64,7 @@ const Navbar = ({ onSearch, onCategorySelect }) => {
     }
   };
 
+
   return (
     <header
       style={{
@@ -81,16 +85,15 @@ const Navbar = ({ onSearch, onCategorySelect }) => {
           NewsHub
         </h1>
         <nav style={{ display: 'flex', alignItems: 'center' }}>
-          {/* Search Form */}
           <form
             style={{ display: 'flex', marginRight: '1rem' }}
-            onSubmit={handleSearch}
+            onSubmit={(e) => e.preventDefault()}
           >
             <input
               type="text"
               placeholder="Search news..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearchChange}
               style={{
                 padding: '0.5rem 1rem',
                 borderRadius: '30px',
@@ -113,7 +116,6 @@ const Navbar = ({ onSearch, onCategorySelect }) => {
             </button>
           </form>
 
-          {/* User Dropdown */}
           <div style={{ position: 'relative' }}>
             <button
               onClick={toggleDropdown}
@@ -186,7 +188,6 @@ const Navbar = ({ onSearch, onCategorySelect }) => {
         </nav>
       </div>
 
-      {/* Categories */}
       <div
         style={{ backgroundColor: '#0d6efd', color: '#fff', padding: '0.5rem 0' }}
       >
@@ -199,7 +200,7 @@ const Navbar = ({ onSearch, onCategorySelect }) => {
           }}
           className="container"
         >
-          {[ 'Politics', 'Business', 'Tech', 'Arts', 'Science', 'Health', 'Sports', 'All' ].map((category) => (
+          {['All', 'Technology', 'Sports', 'Politics', 'Business'].map((category) => (
             <button
               key={category}
               onClick={() => handleCategoryClick(category)}
