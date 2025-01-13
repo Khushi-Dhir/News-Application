@@ -4,6 +4,8 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 const transporter   = require('../config/nodemailer');
+const {PASSWORD_RESET_TEMPLATE,email_verify_template} = require('../config/emailTemplate')
+
 // Sign In
 const signIn = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
@@ -74,6 +76,7 @@ const sendverifyOtp = asyncHandler(async (req, res) => {
             to: user.email,
             subject: 'Account Verification OTP',
             text: `Welcome to dailyNews. Your OTP for account verification is: ${otp}`,
+            html: email_verify_template.replace("{{otp}}",otp).replace("{{email}}",user.email)
         };
         await transporter.sendMail(mailOptions);
 
@@ -164,6 +167,7 @@ const sendResetOtp = asyncHandler(async (req, res) => {
             to: user.email,
             subject: 'Password Reset OTP',
             text: `Welcome to dailyNews. Your Reset Password  OTP is: ${otp}`,
+            html: PASSWORD_RESET_TEMPLATE.replace("{{otp}}",otp).replace("{{email}}",user.email)
         };
         await transporter.sendMail(mailOptions);
 
